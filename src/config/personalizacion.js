@@ -16,7 +16,7 @@ const personalizacion = {
   // "titulo" es la etiqueta pequeña sobre la frase (opcional: deja '' para ocultarla).
   mensajesProgreso: [
     { desde: 0,  titulo: 'El comienzo',
-      texto: 'Toca mi corazón, mi amorcito 💗' },
+      texto: 'Toca el corazón 💗' },
     { desde: 20, titulo: 'Una bonita coincidencia',
       texto: 'Quién diría que aquel sábado 17 comenzaría algo tan bonito. ❤️' },
     { desde: 40, titulo: 'Lo que provocas en mí',
@@ -60,7 +60,7 @@ const personalizacion = {
 
   // ✍️  TU CARTA.  Respeta las comillas invertidas ` al inicio y al final.
   // Los saltos de línea y los emojis se respetan tal cual.
-  textoCarta: `A veces pienso en lo curiosa que es la vida. Aquella noche del viernes 16 te vi en tu moto con tu prima, sin imaginar que al día siguiente haría todo lo posible por encontrar la manera de hablarte. No sabía cómo acercarme a ti, pero sentía que no podía dejar pasar la oportunidad de conocerte. Hasta me puse una foto de perfil para escribirte por Facebook. 😂❤️
+  textoCarta: `A veces pienso en lo curiosa que es la vida. Aquella noche del viernes 16 te vi en la moto con tu prima, sin imaginar que al día siguiente haría todo lo posible por encontrar la manera de hablarte. No sabía cómo acercarme a ti, pero sentía que no podía dejar pasar la oportunidad de conocerte. Hasta me puse una foto de perfil para escribirte por Facebook. 😂❤️
 
 Y llegó aquel domingo en la playa, donde sentí una química contigo que me hizo pensar que eras esa personita con la que quería estar. Tanto me costaba despedirme que decidí quedarme un día más, solo para verte unos minutos más y tener un ratito extra contigo. Ahora recuerdo todo eso con una sonrisa, porque sin saberlo, estaba comenzando una historia muy bonita.
 
