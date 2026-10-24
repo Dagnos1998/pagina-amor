@@ -169,7 +169,7 @@ img { max-width: 100%; display: block; }
 
 /* ---------------- Secciones de la historia ---------------- */
 .seccion { width: 100%; max-width: 560px; margin: 0 auto; padding: 56px 20px; display: flex; flex-direction: column; align-items: center; text-align: center; }
-.seccion--fotos { min-height: 100vh; min-height: 100dvh; justify-content: center; padding-top: 40px; }
+.seccion--fotos { min-height: 100vh; min-height: 100svh; justify-content: center; padding-top: 28px; padding-bottom: 28px; }
 .titulo-seccion {
   margin: 0; white-space: pre-line;
   font-family: var(--fuente-titulo); font-style: italic; font-weight: 400;
@@ -177,7 +177,7 @@ img { max-width: 100%; display: block; }
   animation: aparecer 1s .2s var(--ease) both;
 }
 .subtitulo-seccion { margin: 10px 0 0; font-size: .78rem; letter-spacing: .3em; text-transform: uppercase; color: var(--texto-suave); animation: aparecer 1s .35s var(--ease) both; }
-.separador { margin: 34px 0 6px; width: 64px; stroke: var(--rosa-oscuro); fill: none; stroke-width: 2; stroke-linecap: round; opacity: .8; }
+.separador { margin: 22px 0 4px; width: 64px; stroke: var(--rosa-oscuro); fill: none; stroke-width: 2; stroke-linecap: round; opacity: .8; }
 .pista-scroll { margin: 0; font-size: .72rem; letter-spacing: .2em; text-transform: uppercase; color: var(--texto-suave); animation: rebote 2.2s ease-in-out infinite; }
 @keyframes rebote { 0%,100% { transform: translateY(0); opacity: .6; } 50% { transform: translateY(6px); opacity: 1; } }
 
@@ -185,7 +185,7 @@ img { max-width: 100%; display: block; }
 .carrusel { width: 100%; margin-top: 28px; animation: aparecer 1s .45s var(--ease) both; border-radius: var(--radio); }
 .carrusel:focus-visible { outline-offset: 8px; }
 .polaroid {
-  position: relative; width: min(100%, 400px); margin: 0 auto;
+  position: relative; width: min(100%, 400px, calc((100svh - 330px) * .8 + 28px)); min-width: 240px; margin: 0 auto;
   background: var(--papel); padding: 14px 14px 18px; border-radius: 10px;
   box-shadow: var(--sombra), 0 1px 0 rgba(255,255,255,.8) inset;
   transform: rotate(-1.2deg);
