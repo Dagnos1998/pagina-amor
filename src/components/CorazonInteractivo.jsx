@@ -8,11 +8,13 @@ const ESPERA_ENTRE_TOQUES = 140 // ms — evita que toques ultrarrápidos se acu
 /**
  * Pantalla de bienvenida: nombre + corazón que se llena con cada toque.
  * onUltimoToque → se llama dentro del toque que llega al 100 % (sirve para desbloquear el audio).
- * onCompletado  → se llama cuando termina la pausa del mensaje final.
+ * onCompletado  → se llama al pasar a las fotos: cuando ella vuelve a tocar el corazón
+ *                 estando al 100 %, o solo, cuando termina la espera (lo que ocurra primero).
  */
+const BLOQUEO_TRAS_100 = 900 // ms — evita que el mismo toque rápido del 100 % se salte el mensaje final
 export default function CorazonInteractivo({
   nombre, mensajeBienvenida, mensajes, mensajeFinal, tituloFinal = '',
-  incremento = 10, espera = 2.2, corazonesAlTocar = true,
+  incremento = 10, espera = 2.2, corazonesAlTocar = true, textoContinuar = 'Toca el corazón para ver tu sorpresa 💗',
   onUltimoToque, onCompletado,
 }) {
   const [progreso, setProgreso] = useState(0)
@@ -20,6 +22,9 @@ export default function CorazonInteractivo({
   const [miniCorazones, setMiniCorazones] = useState([])
   const ultimoToque = useRef(0)
   const completadoRef = useRef(false)
+  const avanzadoRef = useRef(false)
+  const momento100 = useRef(0)
+  const [mostrarPista, setMostrarPista] = useState(false)
   const idRef = useRef(0)
 
   const completo = progreso >= 100
@@ -28,8 +33,22 @@ export default function CorazonInteractivo({
     : [...mensajes].sort((a, b) => a.desde - b.desde).filter((m) => progreso >= m.desde).pop() ?? {}
   const mensaje = actualMsg.texto ?? ''
 
+  // Pasa a las fotos una sola vez (sea por toque o por tiempo)
+  const avanzar = useCallback(() => {
+    if (avanzadoRef.current) return
+    avanzadoRef.current = true
+    onCompletado?.()
+  }, [onCompletado])
+
   const tocar = useCallback(() => {
-    if (completadoRef.current) return
+    if (completadoRef.current) {
+      // Al 100 %: un toque más lleva directo a la sorpresa
+      if (performance.now() - momento100.current >= BLOQUEO_TRAS_100) {
+        setLatido((n) => n + 1)
+        avanzar()
+      }
+      return
+    }
     const ahora = performance.now()
     if (ahora - ultimoToque.current < ESPERA_ENTRE_TOQUES) return
     ultimoToque.current = ahora
@@ -49,16 +68,24 @@ export default function CorazonInteractivo({
       const siguiente = Math.min(100, p + incremento)
       return siguiente
     })
-  }, [incremento, corazonesAlTocar])
+  }, [incremento, corazonesAlTocar, avanzar])
 
   // Detecta la llegada al 100 % una única vez
   useEffect(() => {
     if (progreso >= 100 && !completadoRef.current) {
       completadoRef.current = true
-      const t = setTimeout(() => onCompletado?.(), (prefiereMenosMovimiento() ? 0.8 : espera) * 1000)
-      return () => clearTimeout(t)
+      momento100.current = performance.now()
     }
-  }, [progreso, espera, onCompletado])
+  }, [progreso])
+
+  // Al 100 %: muestra la pista para continuar y programa el paso automático.
+  // (Va en un efecto aparte para que ningún re-render cancele el temporizador.)
+  useEffect(() => {
+    if (progreso < 100) return
+    const tPista = setTimeout(() => setMostrarPista(true), BLOQUEO_TRAS_100)
+    const tAuto = setTimeout(avanzar, Math.max(1, prefiereMenosMovimiento() ? 0.8 : espera) * 1000)
+    return () => { clearTimeout(tPista); clearTimeout(tAuto) }
+  }, [progreso >= 100, espera, avanzar]) // eslint-disable-line react-hooks/exhaustive-deps
 
   // El desbloqueo del audio necesita ocurrir sincrónicamente dentro del toque
   const alPulsar = (e) => {
@@ -84,8 +111,7 @@ export default function CorazonInteractivo({
             type="button"
             className="corazon-boton"
             onClick={alPulsar}
-            disabled={completo}
-            aria-label={completo ? 'Corazón completo' : `Toca el corazón. Progreso ${progreso} por ciento`}
+            aria-label={completo ? textoContinuar : `Toca el corazón. Progreso ${progreso} por ciento`}
           >
             <span key={latido} className={`corazon-latido ${latido ? 'corazon-latido--activo' : ''}`}>
               <IconoCorazon className="corazon-svg" />
@@ -109,6 +135,9 @@ export default function CorazonInteractivo({
         </div>
 
         <BarraProgreso valor={progreso} />
+        <p className={`bienvenida__continuar ${mostrarPista ? 'bienvenida__continuar--visible' : ''}`} aria-hidden={!mostrarPista}>
+          {textoContinuar}
+        </p>
       </div>
     </section>
   )

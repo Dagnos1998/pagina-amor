@@ -50,6 +50,7 @@ export default function App() {
             tituloFinal={config.tituloFinal}
             incremento={config.incrementoPorToque}
             espera={config.esperaAntesDeFotos}
+            textoContinuar={config.textoContinuar}
             corazonesAlTocar={deco.corazonesAlTocar}
             onUltimoToque={musica.desbloquear}
             onCompletado={alCompletar}

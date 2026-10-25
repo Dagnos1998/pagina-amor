@@ -31,7 +31,8 @@ const personalizacion = {
 
   // Segundos que se queda el mensaje final antes de pasar a las fotos
   // (es largo, así que le damos tiempo para leerlo)
-  esperaAntesDeFotos: 5,
+   esperaAntesDeFotos: 10,
+   textoContinuar: 'Toca el corazón para ver tu sorpresa 💗',
 
   /* ---------- 2. Carrusel de fotos ---------- */
   tituloFotos: 'Tú y yo,\nuna historia muy bonita',
